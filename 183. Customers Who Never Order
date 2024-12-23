@@ -1,0 +1,21 @@
+import pandas as pd
+
+def find_customers(customers: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
+    merge_df = customers.merge(orders, how = 'left', left_on = 'id', right_on = 'customerId')
+    rename_df = merge_df.rename(columns = {'name' : 'Customers'})
+    df1 = rename_df[rename_df['customerId'].isna()]
+    return df1[['Customers']]
+
+
+////////////////////////
+def find_customers(customers: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
+    df = customers[~customers['id'].isin(orders['customerId'])]
+    df = df.rename(columns={'name' : 'Customers'})
+    return df[['Customers']]
+
+////////////////////////
+def find_customers(customers: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
+    mask = customers['id'].isin(orders['customerId'])
+    df = customers[['name']][~mask]
+    df.columns = ['Customers']
+    return df
