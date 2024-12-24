@@ -1,0 +1,18 @@
+import pandas as pd
+
+def is_start_M(name):
+    if not name:
+        return False
+    if name[0] == 'M':
+        return True
+    else:
+        return False
+
+def calculate_special_bonus(employees: pd.DataFrame) -> pd.DataFrame:
+    # mask = (employees['employee_id'] % 2 == 1) & (employees['name'].apply(is_start_M) == False)
+    mask = (employees['employee_id'] % 2 == 1) & (~employees['name'].str.startswith('M'))
+    df = employees[['employee_id','salary']]
+    df.rename(columns = {'salary':'bonus'}, inplace = True)
+    df['bonus'][~mask] = 0
+    df = df.sort_values(by='employee_id', ascending = True)
+    return df
