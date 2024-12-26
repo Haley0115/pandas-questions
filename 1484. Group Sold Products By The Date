@@ -1,0 +1,8 @@
+def categorize_products(activities: pd.DataFrame) -> pd.DataFrame:
+    # def custom_agg(products):
+    #     return ",".join(sorted(products.unique()))
+    # df = activities.groupby('sell_date').agg(num_sold=('product','nunique'), products = ('product', custom_agg)).reset_index()
+    # return df
+
+    df = activities.groupby('sell_date').agg(num_sold = ('product','nunique'), products = ('product', lambda x : ','.join(sorted(x.unique())))).reset_index()
+    return df
