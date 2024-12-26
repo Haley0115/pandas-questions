@@ -1,0 +1,15 @@
+import pandas as pd
+
+def largest_orders(orders: pd.DataFrame) -> pd.DataFrame:
+    if orders.empty:
+        return orders[['customer_number']]
+    df = orders.groupby('customer_number').count().reset_index()
+    maxindex = df['order_number'].idxmax()
+    df = df.loc[[maxindex]]
+    df = df[['customer_number']]
+    return df
+
+/////////////////////////////
+    df = orders.groupby('customer_number').count().reset_index()
+    max = df[df['order_number'] == df['order_number'].max()][['customer_number']]
+    return max
