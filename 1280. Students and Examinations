@@ -1,0 +1,8 @@
+import pandas as pd
+
+def students_and_examinations(students: pd.DataFrame, subjects: pd.DataFrame, examinations: pd.DataFrame) -> pd.DataFrame:
+    df = examinations.groupby(['student_id', 'subject_name']).agg(attended_exams=('subject_name', 'count')).reset_index()
+    total = pd.merge(students, subjects, how='cross')
+    total = total.merge(df, how='left', on =['student_id', 'subject_name'], sort='student_id')
+    total['attended_exams'] = total['attended_exams'].fillna(0)
+    return total
