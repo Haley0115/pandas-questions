@@ -1,0 +1,12 @@
+import pandas as pd
+
+def nth_highest_salary(employee: pd.DataFrame, N: int) -> pd.DataFrame:
+    employee = employee.groupby('salary').count().reset_index()
+    if N > employee['salary'].count() or N <= 0:
+        null = pd.DataFrame({f'getNthHighestSalary({N})' : [None]})
+        return null
+    else:
+        employee = employee.sort_values(by='salary', ascending = False).reset_index()
+        salary = employee['salary'][N-1]
+        highests = pd.DataFrame({f'getNthHighestSalary({N})' : [salary]})
+        return highests
