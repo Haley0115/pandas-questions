@@ -1,0 +1,8 @@
+import pandas as pd
+
+def find_employees(employee: pd.DataFrame) -> pd.DataFrame:
+    df = employee.merge(employee, how='left', left_on='managerId', right_on='id')
+    df = df[(df['salary_x']>df['salary_y'])][['name_x']]
+    df.rename(columns={'name_x':'Employee'}, inplace=True)
+    # print(df)
+    return df
