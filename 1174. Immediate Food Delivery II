@@ -1,0 +1,9 @@
+import pandas as pd
+
+def immediate_food_delivery(delivery: pd.DataFrame) -> pd.DataFrame:
+    #first order
+    first_order = delivery.sort_values(by = 'order_date', ascending = True).drop_duplicates(subset = 'customer_id', keep = 'first')
+    #immediate order
+    immediate_order = first_order[first_order['order_date'] == first_order['customer_pref_delivery_date']]
+    immediate_percentage = round(immediate_order.shape[0] / first_order.shape[0] * 100, 2)
+    return pd.DataFrame({'immediate_percentage' : [immediate_percentage]})
