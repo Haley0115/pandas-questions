@@ -1,0 +1,8 @@
+import pandas as pd
+
+def find_customers(customer: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:
+    customer.drop_duplicates(subset = ['customer_id', 'product_key'], inplace = True)
+    customer1 = customer.groupby('customer_id').count().reset_index()
+    customer2 = customer1[customer1['product_key'] == len(product)]
+    return customer2[['customer_id']]
+    
