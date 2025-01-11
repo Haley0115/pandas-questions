@@ -1,0 +1,12 @@
+import pandas as pd
+
+def market_analysis(users: pd.DataFrame, orders: pd.DataFrame, items: pd.DataFrame) -> pd.DataFrame:
+    # keep the 2019 order
+    orders['order_date'] = pd.to_datetime(orders['order_date']).dt.strftime('%Y')
+    orders2019 = orders[(orders['order_date'] == '2019')]
+    orders2019_updated = orders2019.groupby('buyer_id').count().reset_index()
+    # merge users table and orders table
+    buyers2019 = users.merge(orders2019_updated, how = 'left', left_on = 'user_id', right_on = 'buyer_id')
+    buyers2019.fillna(0, inplace = True)
+    buyers2019.rename(columns={'order_date':'orders_in_2019', 'user_id':'buyer_id', 'buyer_id':'1'}, inplace = True)
+    return buyers2019[['buyer_id', 'join_date', 'orders_in_2019']]
