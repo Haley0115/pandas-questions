@@ -1,0 +1,8 @@
+import pandas as pd
+
+def sum_daily_odd_even(transactions: pd.DataFrame) -> pd.DataFrame:
+    odd = transactions[transactions['amount'] % 2 == 1].groupby('transaction_date')['amount'].sum().reset_index(name = 'odd_sum')
+    even = transactions[transactions['amount'] % 2 == 0].groupby('transaction_date')['amount'].sum().reset_index(name = 'even_sum')
+    total = transactions.groupby('transaction_date')['amount'].sum().reset_index(name = 'total_sum')
+    output = total.merge(odd, how = 'left', on = 'transaction_date').merge(even, how = 'left', on = 'transaction_date').fillna(0).sort_values(by = 'transaction_date', ascending = True)
+    return output[['transaction_date', 'odd_sum', 'even_sum']]
