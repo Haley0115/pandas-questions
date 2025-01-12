@@ -1,0 +1,11 @@
+import pandas as pd
+
+def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -> pd.DataFrame:
+    total = confirmations.groupby('user_id').count().reset_index()
+    confirmed = confirmations[confirmations['action'] == 'confirmed']
+    confirmed1 = confirmed.groupby('user_id').count().reset_index()
+    df1 = signups.merge(total, how = 'left', on = 'user_id').fillna(0)
+    df2 = df1.merge(confirmed1, how = 'left', on = 'user_id').fillna(0)
+    df2['confirmation_rate'] = round(df2['time_stamp'] / df2['time_stamp_y'], 2)
+    df2 = df2.fillna(0)
+    return df2[['user_id', 'confirmation_rate']]
