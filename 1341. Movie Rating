@@ -1,0 +1,13 @@
+import pandas as pd
+
+def movie_rating(movies: pd.DataFrame, users: pd.DataFrame, movie_rating: pd.DataFrame) -> pd.DataFrame:
+    users1 = movie_rating.groupby('user_id').agg(users = ('user_id', 'count')).reset_index()
+    users2 = users.merge(users1, on = 'user_id')
+    users2 = users2[users2['users'] == users2['users'].max()].sort_values(by = 'name')
+    movie_rating['month'] = pd.to_datetime(movie_rating['created_at']).dt.strftime('%Y-%m')
+    movies1 = movie_rating[movie_rating['month'] == '2020-02']
+    movies2 = movies1.groupby('movie_id')['rating'].mean().reset_index()
+    movies3 = movies.merge(movies2, on = 'movie_id')
+    movies3 = movies3[movies3['rating'] == movies3['rating'].max()].sort_values(by = 'title')
+    output = pd.DataFrame({'results': [users2.iloc[0,1], movies3.iloc[0,1]]})
+    return output
