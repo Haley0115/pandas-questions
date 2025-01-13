@@ -1,0 +1,8 @@
+import pandas as pd
+
+def restaurant_growth(customer: pd.DataFrame) -> pd.DataFrame:
+    customer1 = customer.groupby('visited_on')['amount'].sum().reset_index()
+    customer1['average_amount'] = customer1.rolling(window = '7D', on = 'visited_on', closed = 'right')['amount'].mean().round(2)
+    customer1['amount'] = customer1.rolling(window = '7D', on = 'visited_on', closed = 'right')['amount'].sum()
+    output = customer1.iloc[6:, :]
+    return output
