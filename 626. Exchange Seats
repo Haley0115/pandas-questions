@@ -1,0 +1,16 @@
+import pandas as pd
+
+def exchange_seats(seat: pd.DataFrame) -> pd.DataFrame:
+    seat_odd = seat[seat['id']%2 == 1]
+    seat_even = seat[seat['id']%2 == 0]
+    if len(seat_even) >= len(seat_odd):
+        seat_odd['id'] = seat_odd['id'] + 1
+        seat_even['id'] = seat_even['id'] - 1
+        output1 = pd.concat([seat_odd, seat_even], axis = 0).sort_values('id')
+    else:
+        seat_last = seat_odd.tail(1)
+        seat_odd = seat_odd.iloc[0:-1, :]
+        seat_odd['id'] = seat_odd['id'] + 1
+        seat_even['id'] = seat_even['id'] - 1
+        output1 = pd.concat([seat_odd, seat_even, seat_last], axis = 0).sort_values('id')
+    return output1
