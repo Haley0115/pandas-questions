@@ -1,0 +1,8 @@
+import pandas as pd
+
+def find_students_who_improved(scores: pd.DataFrame) -> pd.DataFrame:
+    scores_updated = scores.sort_values(by = ['student_id', 'subject', 'exam_date'], ascending = True)
+    scores_1 = scores_updated.groupby(['student_id', 'subject']).agg(first_score = ('score', 'first'), latest_score = ('score', 'last')).reset_index()
+    print(scores_1)
+    output = scores_1[scores_1['latest_score'] > scores_1['first_score']]
+    return output
